@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Company List{% endblock %}
+
+{% block content %}
+    <h1>Company List</h1>
+    {% if perms.company.add_company %}
+        <a href="{% url 'company:company_create' %}" class="btn btn-primary mb-3">Create New Company</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Register Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in companies %}
+                <tr>
+                    <td>{{ company.name }}</td>
+                    <td>{{ company.register_name }}</td>
+                    <td>{{ company.email }}</td>
+                    <td>
+                        <a href="{% url 'company:company_detail' company.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.company.change_company %}
+                            <a href="{% url 'company:company_update' company.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.company.delete_company %}
+                            <a href="{% url 'company:company_delete' company.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">No companies found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

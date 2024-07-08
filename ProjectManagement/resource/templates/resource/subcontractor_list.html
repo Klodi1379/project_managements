@@ -1,0 +1,42 @@
+{% extends 'resource/resource_base.html' %}
+
+{% block title %}SubContractor List{% endblock %}
+
+{% block resource_content %}
+    <h1>SubContractor List</h1>
+    {% if perms.resource.add_subcontractor %}
+        <a href="{% url 'resource:subcontractor_create' %}" class="btn btn-primary mb-3">Add New SubContractor</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Contact Person</th>
+                <th>Phone Number</th>
+                <th>Specialization</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subcontractor in subcontractors %}
+                <tr>
+                    <td>{{ subcontractor.name }}</td>
+                    <td>{{ subcontractor.contact_person }}</td>
+                    <td>{{ subcontractor.phone_number }}</td>
+                    <td>{{ subcontractor.specialization }}</td>
+                    <td>
+                        <a href="{% url 'resource:subcontractor_detail' subcontractor.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.resource.change_subcontractor %}
+                            <a href="{% url 'resource:subcontractor_update' subcontractor.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.resource.delete_subcontractor %}
+                            <a href="{% url 'resource:subcontractor_delete' subcontractor.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No subcontractors found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

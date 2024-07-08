@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Resource Allocations{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Resource Allocations</h1>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h2>Material Allocations</h2>
+    <a href="{% url 'resource_allocation:material_allocation_create' %}" class="btn btn-primary mb-3">Allocate Material</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Material</th>
+                <th>Quantity</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for allocation in material_allocations %}
+            <tr>
+                <td>{{ allocation.project.name }}</td>
+                <td>{{ allocation.material.name }}</td>
+                <td>{{ allocation.quantity }}</td>
+                <td>{{ allocation.start_date }}</td>
+                <td>{{ allocation.end_date }}</td>
+                <td>
+                    <a href="{% url 'resource_allocation:material_allocation_update' allocation.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'resource_allocation:material_allocation_delete' allocation.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No material allocations found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Equipment Allocations</h2>
+    <a href="{% url 'resource_allocation:equipment_allocation_create' %}" class="btn btn-primary mb-3">Allocate Equipment</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Equipment</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for allocation in equipment_allocations %}
+            <tr>
+                <td>{{ allocation.project.name }}</td>
+                <td>{{ allocation.equipment.name }}</td>
+                <td>{{ allocation.start_date }}</td>
+                <td>{{ allocation.end_date }}</td>
+                <td>
+                    <a href="{% url 'resource_allocation:equipment_allocation_update' allocation.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'resource_allocation:equipment_allocation_delete' allocation.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No equipment allocations found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Employee Allocations</h2>
+    <a href="{% url 'resource_allocation:employee_allocation_create' %}" class="btn btn-primary mb-3">Allocate Employee</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Employee</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for allocation in employee_allocations %}
+            <tr>
+                <td>{{ allocation.project.name }}</td>
+                <td>{{ allocation.employee.user.get_full_name }}</td>
+                <td>{{ allocation.start_date }}</td>
+                <td>{{ allocation.end_date }}</td>
+                <td>
+                    <a href="{% url 'resource_allocation:employee_allocation_update' allocation.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'resource_allocation:employee_allocation_delete' allocation.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No employee allocations found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

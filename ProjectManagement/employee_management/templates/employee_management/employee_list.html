@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee List{% endblock %}
+
+{% block content %}
+    <h1>Employee List</h1>
+    {% if perms.employee_management.add_employee %}
+        <a href="{% url 'employee_management:employee_create' %}" class="btn btn-primary mb-3">Create New Employee</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Employee ID</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.user.get_full_name }}</td>
+                    <td>{{ employee.employee_id }}</td>
+                    <td>{{ employee.department }}</td>
+                    <td>{{ employee.position }}</td>
+                    <td>
+                        <a href="{% url 'employee_management:employee_detail' employee.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.employee_management.change_employee %}
+                            <a href="{% url 'employee_management:employee_update' employee.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.employee_management.delete_employee %}
+                            <a href="{% url 'employee_management:employee_delete' employee.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No employees found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

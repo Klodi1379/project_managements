@@ -1,0 +1,40 @@
+{% extends 'resource/resource_base.html' %}
+
+{% block title %}Craft List{% endblock %}
+
+{% block resource_content %}
+    <h1>Craft List</h1>
+    {% if perms.resource.add_craft %}
+        <a href="{% url 'resource:craft_create' %}" class="btn btn-primary mb-3">Add New Craft</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Skill Level</th>
+                <th>Hourly Rate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for craft in crafts %}
+                <tr>
+                    <td>{{ craft.name }}</td>
+                    <td>{{ craft.skill_level }}</td>
+                    <td>${{ craft.hourly_rate }}</td>
+                    <td>
+                        <a href="{% url 'resource:craft_detail' craft.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.resource.change_craft %}
+                            <a href="{% url 'resource:craft_update' craft.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.resource.delete_craft %}
+                            <a href="{% url 'resource:craft_delete' craft.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">No crafts found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

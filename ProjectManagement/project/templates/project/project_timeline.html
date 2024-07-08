@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Project Timeline{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsgantt-improved@2.8.2/dist/jsgantt.css">
+<style>
+    #gantt-chart {
+        width: 100%;
+        height: 800px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h1>Project Timeline</h1>
+    <div id="gantt-chart"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/jsgantt-improved@2.8.2/dist/jsgantt.js"></script>
+<script>
+    var g = new JSGantt.GanttChart(document.getElementById('gantt-chart'), 'week');
+
+    g.setOptions({
+        vCaptionType: 'Complete',  // Set to Show Caption : None,Caption,Resource,Duration,Complete,
+        vQuarterColWidth: 36,
+        vDateTaskDisplayFormat: 'day dd month yyyy', // Shown in tool tip box
+        vDayMajorDateDisplayFormat: 'mon yyyy - Week ww',// Set format to display dates in the "Major" header of the "Day" view
+        vWeekMinorDateDisplayFormat: 'dd mon', // Set format to display dates in the "Minor" header of the "Week" view
+        vLang: 'en',
+        vShowTaskInfoLink: 1, // Show link in tool tip (0/1)
+        vShowEndWeekDate: 0,  // Show/Hide the date for the last day of the week in header for daily view (1/0)
+        vUseSingleCell: 10000, // Set the threshold for how many cells to merge for min/hour views (0 disables)
+        vFormatArr: ['Day', 'Week', 'Month', 'Quarter'], // Even with setUsageFormat, you have to set vFormatArr to include 'Hour'
+    });
+
+    {% for project in projects %}
+    g.AddTaskItem(new JSGantt.TaskItem(
+        {{ project.id }}, // pID
+        "{{ project.name }}", // pName
+        "{{ project.start_date|date:'Y-m-d' }}", // pStart
+        "{{ project.end_date|date:'Y-m-d' }}", // pEnd
+        "ggroupblack", // pClass
+        "", // pLink
+        0, // pMile
+        "", // pRes
+        {{ project.percent_complete }}, // pComp
+        1, // pGroup
+        0, // pParent
+        1, // pOpen
+        "", // pDepend
+        "", // pCaption
+        "", // pNotes
+        g
+    ));
+
+    {% for task in project.tasks.all %}
+    g.AddTaskItem(new JSGantt.TaskItem(
+        "{{ project.id }}-{{ task.id }}", // pID
+        "{{ task.name }}", // pName
+        "{{ task.start_date|date:'Y-m-d' }}", // pStart
+        "{{ task.end_date|date:'Y-m-d' }}", // pEnd
+        "gtaskblue", // pClass
+        "", // pLink
+        0, // pMile
+        "", // pRes
+        {{ task.percent_complete }}, // pComp
+        0, // pGroup
+        {{ project.id }}, // pParent
+        1, // pOpen
+        "{% for dep in task.dependencies.all %}{{ project.id }}-{{ dep.id }},{% endfor %}", // pDepend
+        "", // pCaption
+        "", // pNotes
+        g
+    ));
+    {% endfor %}
+    {% endfor %}
+
+    g.Draw();
+</script>
+{% endblock %}

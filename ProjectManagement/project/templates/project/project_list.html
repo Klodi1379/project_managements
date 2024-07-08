@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Project List{% endblock %}
+
+{% block content %}
+    <h1>Project List</h1>
+    {% if perms.project.add_project %}
+        <a href="{% url 'project:project_create' %}" class="btn btn-primary mb-3">Create New Project</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.company.name }}</td>
+                    <td>{{ project.get_type_display }}</td>
+                    <td>{{ project.status }}</td>
+                    <td>
+                        <a href="{% url 'project:project_detail' project.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.project.change_project %}
+                            <a href="{% url 'project:project_update' project.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.project.delete_project %}
+                            <a href="{% url 'project:project_delete' project.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No projects found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'resource/resource_base.html' %}
+
+{% block title %}Equipment List{% endblock %}
+
+{% block resource_content %}
+    <h1>Equipment List</h1>
+    {% if perms.resource.add_equipment %}
+        <a href="{% url 'resource:equipment_create' %}" class="btn btn-primary mb-3">Add New Equipment</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Model Number</th>
+                <th>Manufacturer</th>
+                <th>Rental Cost/Day</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in equipment %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.model_number }}</td>
+                    <td>{{ item.manufacturer }}</td>
+                    <td>${{ item.rental_cost_per_day }}</td>
+                    <td>
+                        <a href="{% url 'resource:equipment_detail' item.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.resource.change_equipment %}
+                            <a href="{% url 'resource:equipment_update' item.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.resource.delete_equipment %}
+                            <a href="{% url 'resource:equipment_delete' item.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No equipment found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

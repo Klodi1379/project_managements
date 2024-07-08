@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Task List</h1>
+    <a href="{% url 'project:task_create' %}" class="btn btn-primary mb-3">Create New Task</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Project</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Progress</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.project.name }}</td>
+                <td>{{ task.start_date }}</td>
+                <td>{{ task.end_date }}</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ task.percent_complete }}%;" aria-valuenow="{{ task.percent_complete }}" aria-valuemin="0" aria-valuemax="100">{{ task.percent_complete }}%</div>
+                    </div>
+                </td>
+                <td>
+                    <a href="{% url 'project:task_detail' task.pk %}" class="btn btn-sm btn-info">View</a>
+                    <a href="{% url 'project:task_update' task.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'project:task_delete' task.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No tasks found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

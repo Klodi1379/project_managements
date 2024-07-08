@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        transition: transform .2s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Projects</h5>
+                <p class="card-text display-4">{{ total_projects }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Ongoing Projects</h5>
+                <p class="card-text display-4">{{ ongoing_projects }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Completed Projects</h5>
+                <p class="card-text display-4">{{ completed_projects }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Total Resources</h5>
+                <p class="card-text display-4">{{ total_materials|add:total_equipment|add:total_crafts|add:total_subcontractors }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Project Progress</h5>
+                <canvas id="projectProgressChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Resource Allocation</h5>
+                <canvas id="resourceAllocationChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Project Progress Chart
+    var ctxProgress = document.getElementById('projectProgressChart').getContext('2d');
+    var progressChart = new Chart(ctxProgress, {
+        type: 'bar',
+        data: {
+            labels: {{ project_names|safe }},
+            datasets: [{
+                label: 'Project Progress (%)',
+                data: {{ project_progress|safe }},
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    // Resource Allocation Chart
+    var ctxResource = document.getElementById('resourceAllocationChart').getContext('2d');
+    var resourceChart = new Chart(ctxResource, {
+        type: 'pie',
+        data: {
+            labels: {{ resource_types|safe }},
+            datasets: [{
+                data: {{ resource_counts|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'resource/resource_base.html' %}
+
+{% block title %}Delete Material{% endblock %}
+
+{% block resource_content %}
+    <h1>Delete Material</h1>
+    <p>Are you sure you want to delete the material "{{ object.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a href="{% url 'resource:material_detail' object.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

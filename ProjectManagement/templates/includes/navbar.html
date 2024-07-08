@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">Project Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Projects & Tasks
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownProjects">
+                        <li><a class="dropdown-item" href="{% url 'project:project_list' %}">Project List</a></li>
+                        <li><a class="dropdown-item" href="{% url 'project:project_create' %}">Create Project</a></li>
+                        <li><a class="dropdown-item" href="{% url 'project:project_timeline' %}">Project Timeline</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'project:task_list' %}">Task List</a></li>
+                        <li><a class="dropdown-item" href="{% url 'project:task_create' %}">Create Task</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmployees" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Employee Management
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownEmployees">
+                        <li><a class="dropdown-item" href="{% url 'employee_management:user_list' %}">Users</a></li>
+                        <li><a class="dropdown-item" href="{% url 'employee_management:employee_list' %}">Employees</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'company:company_list' %}">Companies</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownResources" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Resources
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownResources">
+                        <li><a class="dropdown-item" href="{% url 'resource:material_list' %}">Materials</a></li>
+                        <li><a class="dropdown-item" href="{% url 'resource:equipment_list' %}">Equipment</a></li>
+                        <li><a class="dropdown-item" href="{% url 'resource:craft_list' %}">Crafts</a></li>
+                        <li><a class="dropdown-item" href="{% url 'resource:subcontractor_list' %}">Subcontractors</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'resource_allocation:allocation_list' %}">Resource Allocations</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                            <li><a class="dropdown-item" href="{% url 'employee_management:user_profile' %}">My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

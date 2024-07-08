@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Company Detail: {{ company.name }}{% endblock %}
+
+{% block content %}
+    <h1>Company Detail: {{ company.name }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ company.name }}</h5>
+            <p class="card-text"><strong>Register Name:</strong> {{ company.register_name }}</p>
+            <p class="card-text"><strong>Address:</strong> {{ company.address }}</p>
+            <p class="card-text"><strong>Post Code:</strong> {{ company.post_code }}</p>
+            <p class="card-text"><strong>Phone:</strong> {{ company.phone_number }}</p>
+            <p class="card-text"><strong>Fax:</strong> {{ company.fax_number }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ company.email }}</p>
+            <p class="card-text"><strong>Website:</strong> {{ company.website|default:"Not provided" }}</p>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a href="{% url 'company:company_list' %}" class="btn btn-secondary">Back to List</a>
+        {% if perms.company.change_company %}
+            <a href="{% url 'company:company_update' company.pk %}" class="btn btn-warning">Edit</a>
+        {% endif %}
+        {% if perms.company.delete_company %}
+            <a href="{% url 'company:company_delete' company.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+    </div>
+{% endblock %}

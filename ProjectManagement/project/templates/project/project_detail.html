@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Project Detail: {{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Project Detail: {{ project.name }}</h1>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ project.name }}</h5>
+            <p class="card-text"><strong>Company:</strong> {{ project.company.name }}</p>
+            <p class="card-text"><strong>Project Code:</strong> {{ project.project_code }}</p>
+            <p class="card-text"><strong>Type:</strong> {{ project.get_type_display }}</p>
+            <p class="card-text"><strong>Total Cost:</strong> ${{ project.total_cost }}</p>
+            <p class="card-text"><strong>Start Date:</strong> {{ project.start_date }}</p>
+            <p class="card-text"><strong>End Date:</strong> {{ project.end_date }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ project.status }}</p>
+            <p class="card-text"><strong>Progress:</strong> {{ project.percent_complete }}%</p>
+            <div class="progress mb-3">
+                <div class="progress-bar" role="progressbar" style="width: {{ project.percent_complete }}%;" aria-valuenow="{{ project.percent_complete }}" aria-valuemin="0" aria-valuemax="100">{{ project.percent_complete }}%</div>
+            </div>
+            <p class="card-text"><strong>Description:</strong> {{ project.description }}</p>
+        </div>
+    </div>
+
+    <h2>Project Tasks</h2>
+    <a href="{% url 'project:task_create' %}?project={{ project.pk }}" class="btn btn-primary mb-3">Add New Task</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Progress</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in project.tasks.all %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.start_date }}</td>
+                <td>{{ task.end_date }}</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ task.percent_complete }}%;" aria-valuenow="{{ task.percent_complete }}" aria-valuemin="0" aria-valuemax="100">{{ task.percent_complete }}%</div>
+                    </div>
+                </td>
+                <td>
+                    <a href="{% url 'project:task_update' task.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'project:task_delete' task.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No tasks found for this project.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <a href="{% url 'project:project_list' %}" class="btn btn-secondary">Back to List</a>
+        {% if perms.project.change_project %}
+            <a href="{% url 'project:project_update' project.pk %}" class="btn btn-warning">Edit Project</a>
+        {% endif %}
+        {% if perms.project.delete_project %}
+            <a href="{% url 'project:project_delete' project.pk %}" class="btn btn-danger">Delete Project</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'resource/resource_base.html' %}
+
+{% block title %}Material List{% endblock %}
+
+{% block resource_content %}
+    <h1>Material List</h1>
+    {% if perms.resource.add_material %}
+        <a href="{% url 'resource:material_create' %}" class="btn btn-primary mb-3">Add New Material</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Unit Cost</th>
+                <th>Stock Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+                <tr>
+                    <td>{{ material.name }}</td>
+                    <td>{{ material.unit }}</td>
+                    <td>${{ material.unit_cost }}</td>
+                    <td>{{ material.stock_quantity }}</td>
+                    <td>
+                        <a href="{% url 'resource:material_detail' material.pk %}" class="btn btn-sm btn-info">View</a>
+                        {% if perms.resource.change_material %}
+                            <a href="{% url 'resource:material_update' material.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.resource.delete_material %}
+                            <a href="{% url 'resource:material_delete' material.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No materials found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

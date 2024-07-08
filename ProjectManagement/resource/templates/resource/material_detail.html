@@ -1,0 +1,25 @@
+{% extends 'resource/resource_base.html' %}
+
+{% block title %}Material Detail: {{ material.name }}{% endblock %}
+
+{% block resource_content %}
+    <h1>Material Detail: {{ material.name }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ material.name }}</h5>
+            <p class="card-text"><strong>Unit:</strong> {{ material.unit }}</p>
+            <p class="card-text"><strong>Unit Cost:</strong> ${{ material.unit_cost }}</p>
+            <p class="card-text"><strong>Stock Quantity:</strong> {{ material.stock_quantity }}</p>
+            <p class="card-text"><strong>Description:</strong> {{ material.description }}</p>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a href="{% url 'resource:material_list' %}" class="btn btn-secondary">Back to List</a>
+        {% if perms.resource.change_material %}
+            <a href="{% url 'resource:material_update' material.pk %}" class="btn btn-warning">Edit</a>
+        {% endif %}
+        {% if perms.resource.delete_material %}
+            <a href="{% url 'resource:material_delete' material.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+    </div>
+{% endblock %}

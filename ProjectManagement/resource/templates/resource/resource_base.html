@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'resource:material_list' %}" class="list-group-item list-group-item-action {% if 'material' in request.resolver_match.view_name %}active{% endif %}">Materials</a>
+                <a href="{% url 'resource:equipment_list' %}" class="list-group-item list-group-item-action {% if 'equipment' in request.resolver_match.view_name %}active{% endif %}">Equipment</a>
+                <a href="{% url 'resource:craft_list' %}" class="list-group-item list-group-item-action {% if 'craft' in request.resolver_match.view_name %}active{% endif %}">Crafts</a>
+                <a href="{% url 'resource:subcontractor_list' %}" class="list-group-item list-group-item-action {% if 'subcontractor' in request.resolver_match.view_name %}active{% endif %}">Subcontractors</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            {% block resource_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
